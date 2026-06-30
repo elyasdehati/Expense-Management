@@ -15,6 +15,7 @@ return new class extends Migration
             $table->id();
             $table->string('name');
             $table->decimal('amount', 15, 2);
+            $table->decimal('saving', 15, 2)->nullable();
             $table->enum('currency', ['AFG', 'USD', 'EUR']);
             $table->timestamps();
         });

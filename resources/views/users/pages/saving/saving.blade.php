@@ -25,12 +25,12 @@
                     <p class="font-semibold text-sm">{{ $saving->name }}</p>
 
                     <span class="text-xs opacity-60">
-                        {{ $saving->saved ?? 0 }} / {{ $saving->amount }} {{ $saving->currency }}
+                        {{ $saving->saving ?? 0 }} / {{ $saving->amount }} {{ $saving->currency }}
                     </span>
                 </div>
 
                 @php
-                    $percent = $saving->amount > 0 ? ($saving->saved / $saving->amount) * 100 : 0;
+                    $percent = $saving->amount > 0 ? (($saving->saving ?? 0) / $saving->amount) * 100 : 0;
                 @endphp
 
                 <div class="w-full h-2 rounded-full bg-white/10 overflow-hidden">
@@ -41,7 +41,8 @@
                 <div class="flex justify-between mt-2">
                     <span class="text-xs opacity-50">{{ round($percent) }}%</span>
 
-                    <button onclick="openModal('saving_deposit')" class="text-xs text-indigo-400">
+                    <button onclick="openDepositModal({{ $saving->id }}, {{ $saving->amount ?? 0 }}, {{ $saving->saving ?? 0 }})"
+                            class="text-xs text-indigo-400">
                         Deposit
                     </button>
                 </div>
@@ -105,6 +106,45 @@
     </div>
 </div>
 
+<div id="deposit-modal" class="fixed inset-0 bg-black/50 hidden items-center justify-center z-50">
+    <div class="card-bg rounded-2xl p-5 w-full max-w-md">
+
+        <div class="flex justify-between mb-4">
+            <h3 class="text-lg font-bold">Deposit</h3>
+            <button onclick="closeDepositModal()">✕</button>
+        </div>
+
+        <form method="POST" action="{{ route('deposit.savings') }}">
+            @csrf
+
+            <input type="hidden" name="saving_id" id="saving_id">
+
+            <!-- Target -->
+            <div>
+                <label class="text-sm text-gray-300">Target Amount</label>
+                <input type="number" id="target_amount" class="w-full p-2 bg-white/5 rounded-lg" readonly>
+            </div>
+
+            <!-- Current -->
+            <div class="mt-3">
+                <label class="text-sm text-gray-300">Current Saving</label>
+                <input type="number" id="current_amount" class="w-full p-2 bg-white/5 rounded-lg" readonly>
+            </div>
+
+            <!-- Add -->
+            <div class="mt-3">
+                <label class="text-sm text-gray-300">Add Amount</label>
+                <input type="number" name="add_amount" class="w-full p-2 bg-white/5 rounded-lg" required>
+            </div>
+
+            <button class="w-full mt-4 bg-indigo-600 py-2 rounded-lg text-white">
+                Save
+            </button>
+        </form>
+
+    </div>
+</div>
+
 <!-- Scripts -->
 <script>
 function openModal() {
@@ -120,6 +160,20 @@ function closeModal() {
 document.getElementById('modal').addEventListener('click', function(e) {
     if (e.target === this) closeModal();
 });
+
+function openDepositModal(id, target, current) {
+    document.getElementById('deposit-modal').classList.remove('hidden');
+    document.getElementById('deposit-modal').classList.add('flex');
+
+    document.getElementById('saving_id').value = id;
+    document.getElementById('target_amount').value = target;
+    document.getElementById('current_amount').value = current;
+}
+
+function closeDepositModal() {
+    document.getElementById('deposit-modal').classList.add('hidden');
+    document.getElementById('deposit-modal').classList.remove('flex');
+}
 </script>
 
 @endsection
