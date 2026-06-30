@@ -64,7 +64,7 @@
             <button onclick="closeModal()">✕</button>
         </div>
 
-        <form method="POST" action="{{ route('income.store') }}" class="space-y-4">
+        <form method="POST" action="{{ route('store.savings') }}" class="space-y-4">
             @csrf
 
             <!-- Goal-Name -->
