@@ -32,4 +32,9 @@ class IncomeController extends Controller
 
         return redirect()->back();
     }
+
+    public function DeleteIncome($id){
+        Income::findOrFail($id)->delete();
+        return back();
+    }
 }

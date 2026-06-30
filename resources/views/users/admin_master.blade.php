@@ -577,5 +577,34 @@ const dataHandler = {
     lucide.createIcons();
   });
 </script>
- <script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'a0b00204c5242923',t:'MTc4MTM0MjMwNi4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+ <script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'a0b00204c5242923',t:'MTc4MTM0MjMwNi4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script>
+<script>
+function confirmDelete(event) {
+    event.preventDefault();
+
+    const form = event.target;
+
+    const isFa = currentLang === 'fa';
+    const isDark = document.body.classList.contains('dark');
+
+    Swal.fire({
+        title: isFa ? "مطمئنی حذف شود؟" : "Are you sure?",
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonText: isFa ? "بله" : "Yes",
+        cancelButtonText: isFa ? "لغو" : "Cancel",
+
+        background: isDark ? "#1a1d2e" : "#ffffff",
+        color: isDark ? "#e2e8f0" : "#1e293b",
+    }).then((result) => {
+        if (result.isConfirmed) {
+            form.submit();
+        }
+    });
+
+    return false;
+}
+</script>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+</body>
 </html>

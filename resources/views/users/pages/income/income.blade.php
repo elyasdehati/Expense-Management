@@ -18,32 +18,32 @@
     <!-- Income List -->
     <div id="income-list" class="space-y-2">
 
-        <div id="income-list" class="space-y-2">
-            @foreach($incomes as $income)
-                <div class="card-bg rounded-lg p-3 flex items-center justify-between">
-                    <div>
-                        <p class="text-sm font-medium">{{ $income->source }}</p>
-                        <p class="text-xs opacity-50">
-                            {{ $income->date }} · {{ $income->category }}
-                        </p>
-                    </div>
-
-                    <div class="flex items-center gap-2">
-                        <span class="text-emerald-400 font-bold text-sm">
-                            +{{ $income->amount }} {{ $income->currency }}
-                        </span>
-
-                        <form method="POST" action="#">
-                            @csrf
-                            @method('DELETE')
-                            <button class="p-1 opacity-50 hover:opacity-100">
-                                <i data-lucide="trash-2" style="width:14px;height:14px"></i>
-                            </button>
-                        </form>
-                    </div>
+        <!-- 🔥 فقط اینجا اصلاح شد -->
+        @foreach($incomes as $income)
+            <div class="card-bg rounded-lg p-3 flex items-center justify-between">
+                <div>
+                    <p class="text-sm font-medium">{{ $income->source }}</p>
+                    <p class="text-xs opacity-50">
+                        {{ $income->date }} · {{ $income->category }}
+                    </p>
                 </div>
-            @endforeach
-        </div>
+
+                <div class="flex items-center gap-2">
+                    <span class="text-emerald-400 font-bold text-sm">
+                        +{{ $income->amount }} {{ $income->currency }}
+                    </span>
+
+                    <form method="POST" action="{{ route('income.delete', $income->id) }}" onsubmit="return confirmDelete(event)">
+                        @csrf
+                        @method('DELETE')
+
+                        <button type="submit" class="p-1 opacity-50 hover:opacity-100">
+                            <i data-lucide="trash-2" style="width:14px;height:14px"></i>
+                        </button>
+                    </form>
+                </div>
+            </div>
+        @endforeach
 
     </div>
 

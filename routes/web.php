@@ -21,6 +21,7 @@ Route::middleware('auth')->group(function () {
     Route::controller(IncomeController::class)->group(function () {
         Route::get('/all/income', 'AllIncome')->name('all.income');
         Route::post('/income/store', 'StoreIncome')->name('income.store');
+        Route::delete('/income/delete/{id}', 'DeleteIncome')->name('income.delete');
     });
 
 });
