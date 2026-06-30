@@ -21,15 +21,15 @@
         @foreach($expense as $item)
             <div class="card-bg rounded-lg p-3 flex items-center justify-between">
                 <div>
-                    <p class="text-sm font-medium">{{ $item->source }}</p>
+                    <p class="text-sm font-medium">{{ $item->category }}</p>
                     <p class="text-xs opacity-50">
-                        {{ $item->date }} · {{ $item->category }}
+                        {{ $item->date }}
                     </p>
                 </div>
 
                 <div class="flex items-center gap-2">
-                    <span class="text-emerald-400 font-bold text-sm">
-                        +{{ $item->amount }} {{ $item->currency }}
+                    <span class="text-red-400 font-bold text-sm">
+                        -{{ $item->amount }} {{ $item->currency }}
                     </span>
 
                     <form method="POST" action="{{ route('income.delete', $item->id) }}" onsubmit="return confirmDelete(event)">
@@ -59,7 +59,7 @@
             <button onclick="closeModal()">✕</button>
         </div>
 
-        <form method="POST" action="{{ route('income.store') }}" class="space-y-4">
+        <form method="POST" action="{{ route('store.expense') }}" class="space-y-4">
             @csrf
 
             <!-- Amount -->
@@ -126,19 +126,19 @@
 
 <!-- Scripts -->
 <script>
-function openModal() {
-    document.getElementById('modal').classList.remove('hidden');
-    document.getElementById('modal').classList.add('flex');
-}
+    function openModal() {
+        document.getElementById('modal').classList.remove('hidden');
+        document.getElementById('modal').classList.add('flex');
+    }
 
-function closeModal() {
-    document.getElementById('modal').classList.remove('flex');
-    document.getElementById('modal').classList.add('hidden');
-}
+    function closeModal() {
+        document.getElementById('modal').classList.remove('flex');
+        document.getElementById('modal').classList.add('hidden');
+    }
 
-document.getElementById('modal').addEventListener('click', function(e) {
-    if (e.target === this) closeModal();
-});
+    document.getElementById('modal').addEventListener('click', function(e) {
+        if (e.target === this) closeModal();
+    });
 </script>
 
 @endsection

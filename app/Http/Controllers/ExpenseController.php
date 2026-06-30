@@ -11,4 +11,23 @@ class ExpenseController extends Controller
         $expense = Expense::latest()->get();
         return view('users.pages.expense.expense', compact('expense'));
     }
+
+    public function StoreExpense(Request $request){
+        $request->validate([
+            'amount' => 'required',
+            'currency' => 'required',
+            'category' => 'required',
+            'date' => 'required',
+        ]);
+
+        Expense::create([
+            'amount' => $request->amount,
+            'currency' => $request->currency,
+            'category' => $request->category,
+            'note' => $request->note,
+            'date' => $request->date,
+        ]);
+
+        return redirect()->back();
+    }
 }
