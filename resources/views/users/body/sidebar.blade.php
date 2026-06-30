@@ -21,10 +21,12 @@
          <span data-i18n="nav_expenses">Expenses</span> 
       </a>
       
-      <button class="sidebar-item w-full text-left px-3 py-2.5 rounded-lg flex items-center gap-3 text-sm" data-view="savings"> 
+      
+      <a href="{{ route('all.savings') }}"
+         class="sidebar-item w-full text-left px-3 py-2.5 rounded-lg flex items-center gap-3 text-sm">
          <i data-lucide="piggy-bank" style="width:18px;height:18px"></i>
          <span data-i18n="nav_savings">Savings</span> 
-      </button> 
+      </a>
       
       <button class="sidebar-item w-full text-left px-3 py-2.5 rounded-lg flex items-center gap-3 text-sm" data-view="debts"> 
          <i data-lucide="handshake" style="width:18px;height:18px"></i>
