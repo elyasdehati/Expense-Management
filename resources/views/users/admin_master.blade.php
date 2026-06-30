@@ -53,13 +53,6 @@
     <!-- Dashboard View -->
     @yield('user')
 
-    <!-- Income View -->
-    <section class="view-section" id="view-income">
-     <div class="flex items-center justify-between mb-6">
-      <h2 class="text-2xl font-bold" data-i18n="nav_income">Income</h2><button onclick="openModal('income')" class="px-4 py-2 bg-indigo-600 text-white rounded-lg text-sm font-medium flex items-center gap-2"><i data-lucide="plus" style="width:16px;height:16px"></i><span data-i18n="add">Add</span></button>
-     </div>
-     <div id="income-list" class="space-y-2"></div>
-    </section>
 
     <!-- Expenses View -->
     <section class="view-section" id="view-expenses">
@@ -102,7 +95,7 @@
     </section>
    </main>
   </div><!-- Modal -->
-  <div id="modal-overlay" class="modal-overlay fixed inset-0 bg-black/50 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
+  {{-- <div id="modal-overlay" class="modal-overlay fixed inset-0 bg-black/50 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
    <div class="card-bg rounded-2xl p-6 w-full max-w-md max-h-[80vh] overflow-y-auto fade-in">
     <div class="flex items-center justify-between mb-4">
      <h3 id="modal-title" class="text-lg font-bold">Add</h3><button onclick="closeModal()" class="p-1"><i data-lucide="x" style="width:20px;height:20px"></i></button>
@@ -113,7 +106,7 @@
      <p id="form-loading" class="text-indigo-400 text-xs hidden text-center">Saving...</p>
     </form>
    </div>
-  </div>
+  </div> --}}
   
   <!-- Mobile sidebar overlay -->
   <div id="mobile-sidebar" class="fixed inset-0 z-40 hidden">
@@ -226,107 +219,107 @@ document.getElementById('theme-toggle').addEventListener('click', toggleTheme);
 document.getElementById('refresh-rates-btn').addEventListener('click', fetchExchangeRates);
 
 // Modal
-const formConfigs = {
-    income: ['amount', 'currency', 'category', 'source', 'notes', 'date'],
-    expense: ['amount', 'currency', 'category', 'notes', 'date'],
-    saving_goal: ['goal_name', 'target_amount', 'currency'],
-    saving_deposit: ['amount', 'currency', 'goal_name', 'date'],
-    debt: ['person_name', 'phone', 'amount', 'currency', 'notes', 'due_date', 'date'],
-    budget: ['category', 'budget_limit', 'currency', 'period']
-};
+// const formConfigs = {
+//     income: ['amount', 'currency', 'category', 'source', 'notes', 'date'],
+//     expense: ['amount', 'currency', 'category', 'notes', 'date'],
+//     saving_goal: ['goal_name', 'target_amount', 'currency'],
+//     saving_deposit: ['amount', 'currency', 'goal_name', 'date'],
+//     debt: ['person_name', 'phone', 'amount', 'currency', 'notes', 'due_date', 'date'],
+//     budget: ['category', 'budget_limit', 'currency', 'period']
+// };
 
-const categoryOptions = {
-    income: ['Salary', 'Freelancing', 'Business', 'Investments', 'Gifts', 'Bonuses', 'Other'],
-    expense: ['Food', 'Transport', 'Education', 'Health', 'Shopping', 'Entertainment', 'Travel', 'Bills', 'Rent', 'Business', 'Family', 'Other']
-};
+// const categoryOptions = {
+//     income: ['Salary', 'Freelancing', 'Business', 'Investments', 'Gifts', 'Bonuses', 'Other'],
+//     expense: ['Food', 'Transport', 'Education', 'Health', 'Shopping', 'Entertainment', 'Travel', 'Bills', 'Rent', 'Business', 'Family', 'Other']
+// };
 
-function openModal(type) {
-    currentModal = type;
-    document.getElementById('modal-title').textContent = t('add') + ' - ' + t('nav_' + (type === 'expense' ? 'expenses' : type === 'saving_goal' || type === 'saving_deposit' ? 'savings' : type === 'debt' ? 'debts' : type === 'budget' ? 'budgets' : type));
-    const fields = formConfigs[type] || [];
-    const container = document.getElementById('form-fields');
-    container.innerHTML = '';
+// function openModal(type) {
+//     currentModal = type;
+//     document.getElementById('modal-title').textContent = t('add') + ' - ' + t('nav_' + (type === 'expense' ? 'expenses' : type === 'saving_goal' || type === 'saving_deposit' ? 'savings' : type === 'debt' ? 'debts' : type === 'budget' ? 'budgets' : type));
+//     const fields = formConfigs[type] || [];
+//     const container = document.getElementById('form-fields');
+//     container.innerHTML = '';
 
-    if (type === 'debt') {
-        container.innerHTML += `<div class="flex gap-2 mb-2">
-            <label class="flex-1"><input type="radio" name="debt_type" value="debt_borrowed" checked> ${t('type_borrowed')}</label>
-            <label class="flex-1"><input type="radio" name="debt_type" value="debt_lent"> ${t('type_lent')}</label>
-        </div>`;
-    }
+//     if (type === 'debt') {
+//         container.innerHTML += `<div class="flex gap-2 mb-2">
+//             <label class="flex-1"><input type="radio" name="debt_type" value="debt_borrowed" checked> ${t('type_borrowed')}</label>
+//             <label class="flex-1"><input type="radio" name="debt_type" value="debt_lent"> ${t('type_lent')}</label>
+//         </div>`;
+//     }
 
-    fields.forEach(f => {
-        let input = '';
-        if (f === 'currency') {
-            input = `<select name="${f}" class="w-full p-2.5 rounded-lg bg-white/5 border border-white/10 text-sm"><option value="AFN">AFN</option><option value="USD">USD</option><option value="EUR">EUR</option></select>`;
-        } else if (f === 'category' && categoryOptions[type]) {
-            input = `<select name="${f}" class="w-full p-2.5 rounded-lg bg-white/5 border border-white/10 text-sm">${categoryOptions[type].map(c => `<option value="${c}">${c}</option>`).join('')}</select>`;
-        } else if (f === 'period') {
-            input = `<select name="${f}" class="w-full p-2.5 rounded-lg bg-white/5 border border-white/10 text-sm"><option value="monthly">${t('monthly')}</option><option value="yearly">${t('yearly')}</option></select>`;
-        } else if (f === 'date' || f === 'due_date') {
-            input = `<input type="date" name="${f}" class="w-full p-2.5 rounded-lg bg-white/5 border border-white/10 text-sm" value="${new Date().toISOString().split('T')[0]}">`;
-        } else if (f === 'notes') {
-            input = `<textarea name="${f}" class="w-full p-2.5 rounded-lg bg-white/5 border border-white/10 text-sm" rows="2" placeholder="${t(f)}"></textarea>`;
-        } else {
-            const inputType = ['amount', 'target_amount', 'budget_limit'].includes(f) ? 'number' : f === 'phone' ? 'tel' : 'text';
-            input = `<input type="${inputType}" name="${f}" class="w-full p-2.5 rounded-lg bg-white/5 border border-white/10 text-sm" placeholder="${t(f)}" ${['amount','target_amount','budget_limit'].includes(f) ? 'step="0.01" min="0"' : ''}>`;
-        }
-        container.innerHTML += `<label class="block mb-1 text-xs opacity-60">${t(f)}</label>${input}<div class="mb-2"></div>`;
-    });
+//     fields.forEach(f => {
+//         let input = '';
+//         if (f === 'currency') {
+//             input = `<select name="${f}" class="w-full p-2.5 rounded-lg bg-white/5 border border-white/10 text-sm"><option value="AFN">AFN</option><option value="USD">USD</option><option value="EUR">EUR</option></select>`;
+//         } else if (f === 'category' && categoryOptions[type]) {
+//             input = `<select name="${f}" class="w-full p-2.5 rounded-lg bg-white/5 border border-white/10 text-sm">${categoryOptions[type].map(c => `<option value="${c}">${c}</option>`).join('')}</select>`;
+//         } else if (f === 'period') {
+//             input = `<select name="${f}" class="w-full p-2.5 rounded-lg bg-white/5 border border-white/10 text-sm"><option value="monthly">${t('monthly')}</option><option value="yearly">${t('yearly')}</option></select>`;
+//         } else if (f === 'date' || f === 'due_date') {
+//             input = `<input type="date" name="${f}" class="w-full p-2.5 rounded-lg bg-white/5 border border-white/10 text-sm" value="${new Date().toISOString().split('T')[0]}">`;
+//         } else if (f === 'notes') {
+//             input = `<textarea name="${f}" class="w-full p-2.5 rounded-lg bg-white/5 border border-white/10 text-sm" rows="2" placeholder="${t(f)}"></textarea>`;
+//         } else {
+//             const inputType = ['amount', 'target_amount', 'budget_limit'].includes(f) ? 'number' : f === 'phone' ? 'tel' : 'text';
+//             input = `<input type="${inputType}" name="${f}" class="w-full p-2.5 rounded-lg bg-white/5 border border-white/10 text-sm" placeholder="${t(f)}" ${['amount','target_amount','budget_limit'].includes(f) ? 'step="0.01" min="0"' : ''}>`;
+//         }
+//         container.innerHTML += `<label class="block mb-1 text-xs opacity-60">${t(f)}</label>${input}<div class="mb-2"></div>`;
+//     });
 
-    document.getElementById('modal-overlay').classList.remove('hidden');
-    document.getElementById('form-error').classList.add('hidden');
-    document.getElementById('form-loading').classList.add('hidden');
-}
+//     document.getElementById('modal-overlay').classList.remove('hidden');
+//     document.getElementById('form-error').classList.add('hidden');
+//     document.getElementById('form-loading').classList.add('hidden');
+// }
 
-function closeModal() {
-    document.getElementById('modal-overlay').classList.add('hidden');
-    currentModal = null;
-}
+// function closeModal() {
+//     document.getElementById('modal-overlay').classList.add('hidden');
+//     currentModal = null;
+// }
 
-async function handleSubmit(e) {
-    e.preventDefault();
-    if (allData.length >= 999) {
-        document.getElementById('form-error').textContent = t('limit_warning');
-        document.getElementById('form-error').classList.remove('hidden');
-        return;
-    }
+// async function handleSubmit(e) {
+//     e.preventDefault();
+//     if (allData.length >= 999) {
+//         document.getElementById('form-error').textContent = t('limit_warning');
+//         document.getElementById('form-error').classList.remove('hidden');
+//         return;
+//     }
 
-    const form = e.target;
-    const fd = new FormData(form);
-    const record = { type: currentModal };
+//     const form = e.target;
+//     const fd = new FormData(form);
+//     const record = { type: currentModal };
 
-    if (currentModal === 'debt') {
-        record.type = fd.get('debt_type') || 'debt_borrowed';
-    }
+//     if (currentModal === 'debt') {
+//         record.type = fd.get('debt_type') || 'debt_borrowed';
+//     }
 
-    const fields = formConfigs[currentModal] || [];
-    fields.forEach(f => {
-        const val = fd.get(f);
-        if (['amount', 'target_amount', 'budget_limit'].includes(f)) {
-            record[f] = parseFloat(val) || 0;
-        } else {
-            record[f] = val || '';
-        }
-    });
+//     const fields = formConfigs[currentModal] || [];
+//     fields.forEach(f => {
+//         const val = fd.get(f);
+//         if (['amount', 'target_amount', 'budget_limit'].includes(f)) {
+//             record[f] = parseFloat(val) || 0;
+//         } else {
+//             record[f] = val || '';
+//         }
+//     });
 
-    if (!record.date) record.date = new Date().toISOString();
-    record.status = 'active';
+//     if (!record.date) record.date = new Date().toISOString();
+//     record.status = 'active';
 
-    document.getElementById('form-loading').classList.remove('hidden');
-    document.getElementById('modal-submit-btn').disabled = true;
+//     document.getElementById('form-loading').classList.remove('hidden');
+//     document.getElementById('modal-submit-btn').disabled = true;
 
-    const result = await window.dataSdk.create(record);
+//     const result = await window.dataSdk.create(record);
 
-    document.getElementById('form-loading').classList.add('hidden');
-    document.getElementById('modal-submit-btn').disabled = false;
+//     document.getElementById('form-loading').classList.add('hidden');
+//     document.getElementById('modal-submit-btn').disabled = false;
 
-    if (result.isOk) {
-        closeModal();
-    } else {
-        document.getElementById('form-error').textContent = 'Error saving. Please try again.';
-        document.getElementById('form-error').classList.remove('hidden');
-    }
-}
+//     if (result.isOk) {
+//         closeModal();
+//     } else {
+//         document.getElementById('form-error').textContent = 'Error saving. Please try again.';
+//         document.getElementById('form-error').classList.remove('hidden');
+//     }
+// }
 
 // Delete
 async function deleteRecord(record) {
