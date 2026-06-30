@@ -6,7 +6,7 @@
 
     <!-- Header -->
     <div class="flex items-center justify-between mb-6">
-        <h2 class="text-2xl font-bold">Income</h2>
+        <h2 class="text-2xl font-bold">Expense</h2>
 
         <button onclick="openModal()"
             class="px-4 py-2 bg-indigo-600 text-white rounded-lg text-sm font-medium flex items-center gap-2">
@@ -18,21 +18,21 @@
     <!-- Income List -->
     <div id="income-list" class="space-y-2">
 
-        @foreach($incomes as $income)
+        @foreach($expense as $item)
             <div class="card-bg rounded-lg p-3 flex items-center justify-between">
                 <div>
-                    <p class="text-sm font-medium">{{ $income->source }}</p>
+                    <p class="text-sm font-medium">{{ $item->source }}</p>
                     <p class="text-xs opacity-50">
-                        {{ $income->date }} · {{ $income->category }}
+                        {{ $item->date }} · {{ $item->category }}
                     </p>
                 </div>
 
                 <div class="flex items-center gap-2">
                     <span class="text-emerald-400 font-bold text-sm">
-                        +{{ $income->amount }} {{ $income->currency }}
+                        +{{ $item->amount }} {{ $item->currency }}
                     </span>
 
-                    <form method="POST" action="{{ route('income.delete', $income->id) }}" onsubmit="return confirmDelete(event)">
+                    <form method="POST" action="{{ route('income.delete', $item->id) }}" onsubmit="return confirmDelete(event)">
                         @csrf
                         @method('DELETE')
 
@@ -96,14 +96,6 @@
                     <option value="Bounuses" class="bg-gray-900">Bounuses</option>
                     <option value="Others" class="bg-gray-900">Others</option>
                 </select>
-            </div>
-
-            <!-- Source -->
-            <div>
-                <label class="block mb-1 text-sm text-gray-300">Source</label>
-                <input type="text" name="source"
-                    class="w-full p-2 rounded-lg bg-white/5 border border-white/10 text-white placeholder-gray-400 focus:outline-none focus:border-indigo-500" placeholder="Source"
-                    required>
             </div>
 
             <!-- Note -->

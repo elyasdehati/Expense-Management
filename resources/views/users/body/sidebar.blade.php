@@ -15,10 +15,11 @@
          <span>Income</span>
       </a>
       
-      <button class="sidebar-item w-full text-left px-3 py-2.5 rounded-lg flex items-center gap-3 text-sm" data-view="expenses"> 
+      <a href="{{ route('all.expense') }}"
+         class="sidebar-item w-full text-left px-3 py-2.5 rounded-lg flex items-center gap-3 text-sm">
          <i data-lucide="trending-down" style="width:18px;height:18px"></i>
          <span data-i18n="nav_expenses">Expenses</span> 
-      </button> 
+      </a>
       
       <button class="sidebar-item w-full text-left px-3 py-2.5 rounded-lg flex items-center gap-3 text-sm" data-view="savings"> 
          <i data-lucide="piggy-bank" style="width:18px;height:18px"></i>

@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\ExpenseController;
 use App\Http\Controllers\IncomeController;
 use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
@@ -22,6 +23,12 @@ Route::middleware('auth')->group(function () {
         Route::get('/all/income', 'AllIncome')->name('all.income');
         Route::post('/income/store', 'StoreIncome')->name('income.store');
         Route::delete('/income/delete/{id}', 'DeleteIncome')->name('income.delete');
+    });
+
+    Route::controller(ExpenseController::class)->group(function () {
+        Route::get('/all/expense', 'AllExpense')->name('all.expense');
+        // Route::post('/income/store', 'StoreIncome')->name('income.store');
+        // Route::delete('/income/delete/{id}', 'DeleteIncome')->name('income.delete');
     });
 
 });
