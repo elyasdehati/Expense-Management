@@ -32,7 +32,7 @@
                         -{{ $item->amount }} {{ $item->currency }}
                     </span>
 
-                    <form method="POST" action="{{ route('income.delete', $item->id) }}" onsubmit="return confirmDelete(event)">
+                    <form method="POST" action="{{ route('expense.delete', $item->id) }}" onsubmit="return confirmDelete(event)">
                         @csrf
                         @method('DELETE')
 
@@ -88,12 +88,17 @@
                 <select name="category"
                     class="w-full p-2 rounded-lg bg-white/5 border border-white/10 text-white focus:outline-none focus:border-indigo-500"
                     required>
-                    <option value="Salary" class="bg-gray-900">Salary</option>
-                    <option value="Freelancing" class="bg-gray-900">Freelancing</option>
+                    <option value="Food" class="bg-gray-900">Food</option>
+                    <option value="Transport" class="bg-gray-900">Transport</option>
+                    <option value="Education" class="bg-gray-900">Education</option>
+                    <option value="Health" class="bg-gray-900">Health</option>
+                    <option value="Shopping" class="bg-gray-900">Shopping</option>
+                    <option value="Entertainment" class="bg-gray-900">Entertainment</option>
+                    <option value="Travel" class="bg-gray-900">Travel</option>
+                    <option value="Bills" class="bg-gray-900">Bills</option>
+                    <option value="Rent" class="bg-gray-900">Rent</option>
                     <option value="Business" class="bg-gray-900">Business</option>
-                    <option value="Investments" class="bg-gray-900">Investments</option>
-                    <option value="Gifts" class="bg-gray-900">Gifts</option>
-                    <option value="Bounuses" class="bg-gray-900">Bounuses</option>
+                    <option value="Family" class="bg-gray-900">Family</option>
                     <option value="Others" class="bg-gray-900">Others</option>
                 </select>
             </div>

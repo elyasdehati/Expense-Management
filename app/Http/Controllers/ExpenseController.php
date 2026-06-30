@@ -30,4 +30,9 @@ class ExpenseController extends Controller
 
         return redirect()->back();
     }
+
+    public function DeleteExpense($id){
+        Expense::findOrFail($id)->delete();
+        return back();
+    }
 }

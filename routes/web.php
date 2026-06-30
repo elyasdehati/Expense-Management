@@ -28,7 +28,7 @@ Route::middleware('auth')->group(function () {
     Route::controller(ExpenseController::class)->group(function () {
         Route::get('/all/expense', 'AllExpense')->name('all.expense');
         Route::post('/store/expense', 'StoreExpense')->name('store.expense');
-        // Route::delete('/income/delete/{id}', 'DeleteIncome')->name('income.delete');
+        Route::delete('/expense/delete/{id}', 'DeleteExpense')->name('expense.delete');
     });
 
 });
