@@ -46,7 +46,7 @@ Route::middleware('auth')->group(function () {
     // Loans
     Route::controller(LoansController::class)->group(function () {
         Route::get('/all/loans', 'AllLons')->name('all.loans');
-        // Route::post('/store/savings', 'StoreSavings')->name('store.savings');
+        Route::post('/store/loans', 'StoreLoans')->name('store.loans');
         // Route::post('/deposit/savings', 'Deposit')->name('deposit.savings');
         // Route::delete('/delete/saving/{id}', 'DeleteSaving')->name('delete.saving');
     });

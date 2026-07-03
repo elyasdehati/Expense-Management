@@ -13,13 +13,14 @@ return new class extends Migration
     {
         Schema::create('loans', function (Blueprint $table) {
             $table->id();
-            $table->enum('type', ['Loan', 'Debt']);
+            $table->enum('type', ['Borrowed', 'Lent']);
             $table->string('person_name');
             $table->string('phone')->nullable();
             $table->decimal('amount', 15, 2);
             $table->enum('currency', ['AFG', 'USD', 'EUR']);
             $table->text('notes')->nullable();
             $table->date('due_date')->nullable();
+            $table->date('date')->nullable();
             $table->timestamps();
         });
     }

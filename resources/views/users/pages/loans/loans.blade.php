@@ -20,15 +20,15 @@
         @foreach($loan as $item)
             <div class="card-bg rounded-lg p-3 flex items-center justify-between">
                 <div>
-                    <p class="text-sm font-medium">{{ $item->category }}</p>
+                    <p class="text-sm font-medium">{{ $item->person_name }}</p>
                     <p class="text-xs opacity-50">
-                        {{ $item->date }}
+                        {{ $item->type }} · {{ $item->date }}
                     </p>
                 </div>
 
                 <div class="flex items-center gap-2">
-                    <span class="text-red-400 font-bold text-sm">
-                        -{{ $item->amount }} {{ $item->currency }}
+                    <span class="font-bold text-sm {{ $item->type == 'Borrowed' ? 'text-red-400' : 'text-emerald-400' }}">
+                        {{ $item->amount }} {{ $item->currency }}
                     </span>
 
                     <form method="POST" action="{{ route('expense.delete', $item->id) }}" onsubmit="return confirmDelete(event)">
@@ -57,16 +57,16 @@
             <button onclick="closeModal()">✕</button>
         </div>
 
-        <form method="POST" action="" class="space-y-3">
+        <form method="POST" action="{{ route('store.loans') }}" class="space-y-3">
             @csrf
 
             <!-- Loan / Debt -->
             <div class="flex gap-2 mb-2">
                 <label class="flex-1">
-                    <input type="radio" name="type" value="Loan" checked> I Borrowed
+                    <input type="radio" name="type" value="Borrowed" checked> I Borrowed
                 </label>
                 <label class="flex-1">
-                    <input type="radio" name="type" value="Debt"> I Debt
+                    <input type="radio" name="type" value="Lent"> I Lent
                 </label>
             </div>
 
