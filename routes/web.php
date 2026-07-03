@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\ExpenseController;
 use App\Http\Controllers\IncomeController;
+use App\Http\Controllers\LoansController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\SavingController;
 use Illuminate\Support\Facades\Route;
@@ -34,11 +35,20 @@ Route::middleware('auth')->group(function () {
         Route::delete('/expense/delete/{id}', 'DeleteExpense')->name('expense.delete');
     });
 
+    // Saving
     Route::controller(SavingController::class)->group(function () {
         Route::get('/all/savings', 'AllSavings')->name('all.savings');
         Route::post('/store/savings', 'StoreSavings')->name('store.savings');
         Route::post('/deposit/savings', 'Deposit')->name('deposit.savings');
         Route::delete('/delete/saving/{id}', 'DeleteSaving')->name('delete.saving');
+    });
+
+    // Loans
+    Route::controller(LoansController::class)->group(function () {
+        Route::get('/all/loans', 'AllLons')->name('all.loans');
+        // Route::post('/store/savings', 'StoreSavings')->name('store.savings');
+        // Route::post('/deposit/savings', 'Deposit')->name('deposit.savings');
+        // Route::delete('/delete/saving/{id}', 'DeleteSaving')->name('delete.saving');
     });
 
 });

@@ -28,10 +28,11 @@
          <span data-i18n="nav_savings">Savings</span> 
       </a>
       
-      <button class="sidebar-item w-full text-left px-3 py-2.5 rounded-lg flex items-center gap-3 text-sm" data-view="debts"> 
+      <a href="{{ route('all.loans') }}"
+         class="sidebar-item w-full text-left px-3 py-2.5 rounded-lg flex items-center gap-3 text-sm"> 
          <i data-lucide="handshake" style="width:18px;height:18px"></i>
          <span data-i18n="nav_debts">Loans &amp; Debts</span> 
-      </button> 
+      </a> 
       
       <button class="sidebar-item w-full text-left px-3 py-2.5 rounded-lg flex items-center gap-3 text-sm" data-view="budgets"> 
          <i data-lucide="target" style="width:18px;height:18px"></i>
