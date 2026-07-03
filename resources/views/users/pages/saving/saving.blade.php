@@ -38,13 +38,26 @@
                         style="width:{{ $percent }}%"></div>
                 </div>
 
-                <div class="flex justify-between mt-2">
+                <div class="flex justify-between items-center mt-2">
                     <span class="text-xs opacity-50">{{ round($percent) }}%</span>
 
-                    <button onclick="openDepositModal({{ $saving->id }}, {{ $saving->amount ?? 0 }}, {{ $saving->saving ?? 0 }})"
-                            class="text-xs text-indigo-400">
-                        Deposit
-                    </button>
+                    <div class="flex items-center gap-2">
+
+                        <button onclick="openDepositModal({{ $saving->id }}, {{ $saving->amount ?? 0 }}, {{ $saving->saving ?? 0 }})"
+                                class="text-xs text-indigo-400">
+                            Deposit
+                        </button>
+
+                        <form method="POST" action="{{ route('delete.saving', $saving->id) }}" onsubmit="return confirmDelete(event)">
+                            @csrf
+                            @method('DELETE')
+
+                            <button type="submit" class="p-1 opacity-50 hover:opacity-100">
+                                <i data-lucide="trash-2" style="width:14px;height:14px"></i>
+                            </button>
+                        </form>
+
+                    </div>
                 </div>
 
             </div>

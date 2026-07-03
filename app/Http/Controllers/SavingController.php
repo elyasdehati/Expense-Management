@@ -53,4 +53,10 @@ class SavingController extends Controller
 
         return back();
     }
+
+    public function DeleteSaving($id){
+        Saving::findOrFail($id)->delete();
+
+        return redirect()->back()->with('success', 'Saving deleted successfully.');
+    }
 }

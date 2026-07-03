@@ -38,7 +38,7 @@ Route::middleware('auth')->group(function () {
         Route::get('/all/savings', 'AllSavings')->name('all.savings');
         Route::post('/store/savings', 'StoreSavings')->name('store.savings');
         Route::post('/deposit/savings', 'Deposit')->name('deposit.savings');
-        // Route::delete('/expense/delete/{id}', 'DeleteExpense')->name('expense.delete');
+        Route::delete('/delete/saving/{id}', 'DeleteSaving')->name('delete.saving');
     });
 
 });
