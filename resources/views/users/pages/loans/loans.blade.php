@@ -31,7 +31,7 @@
                         {{ $item->amount }} {{ $item->currency }}
                     </span>
 
-                    <form method="POST" action="{{ route('expense.delete', $item->id) }}" onsubmit="return confirmDelete(event)">
+                    <form method="POST" action="{{ route('delete.loans', $item->id) }}" onsubmit="return confirmDelete(event)">
                         @csrf
                         @method('DELETE')
 

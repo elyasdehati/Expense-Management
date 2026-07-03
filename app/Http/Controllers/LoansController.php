@@ -26,4 +26,10 @@ class LoansController extends Controller
 
         return redirect()->back()->with('success', 'Saved Successfully');
     }
+
+    public function DeleteLoans($id){
+        Loan::findOrFail($id)->delete();
+
+        return redirect()->back()->with('success', 'Saving deleted successfully.');
+    }
 }
