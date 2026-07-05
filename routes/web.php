@@ -55,7 +55,7 @@ Route::middleware('auth')->group(function () {
     Route::controller(BudgetsController::class)->group(function () {
         Route::get('/all/budgets', 'AllBudgets')->name('all.budgets');
         Route::post('/store/budgets', 'StoreBudgets')->name('store.budgets');
-        // Route::delete('/delete/loans/{id}', 'DeleteLoans')->name('delete.loans');
+        Route::delete('/delete/budgets/{id}', 'DeleteBudgets')->name('delete.budgets');
     });
 
 });

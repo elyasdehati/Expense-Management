@@ -23,4 +23,10 @@ class BudgetsController extends Controller
 
         return redirect()->back();
     }
+
+    public function DeleteBudgets($id){
+        Budget::findOrFail($id)->delete();
+
+        return redirect()->back()->with('success', 'Saving deleted successfully.');
+    }
 }

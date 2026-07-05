@@ -15,16 +15,34 @@
         </button>
     </div>
 
-    <!-- Income List -->
     <div id="income-list" class="grid grid-cols-2 md:grid-cols-3 gap-3">
 
         @foreach($budgets as $budget)
-            <div class="card-bg rounded-xl p-4">
+            <div class="card-bg rounded-xl p-4 relative">
+
+                <!-- Delete Button -->
+                <form method="POST"
+                    action="{{ route('delete.budgets', $budget->id) }}"
+                    onsubmit="return confirmDelete(event)"
+                    class="absolute top-2 right-2">
+                    @csrf
+                    @method('DELETE')
+
+                    <button type="submit" class="p-1 opacity-50 hover:opacity-100">
+                        <i data-lucide="trash-2" style="width:14px;height:14px"></i>
+                    </button>
+                </form>
+
                 <p class="text-sm font-semibold">{{ $budget->name }}</p>
+
                 <p class="text-xl font-bold text-indigo-400 mt-2">
                     {{ $budget->amount }} {{ $budget->currency }}
                 </p>
-                <p class="text-xs opacity-50 mt-2">{{ $budget->date }}</p>
+
+                <p class="text-xs opacity-50 mt-2">
+                    {{ $budget->date }}
+                </p>
+
             </div>
         @endforeach
 
