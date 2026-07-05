@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\BudgetsController;
 use App\Http\Controllers\ExpenseController;
 use App\Http\Controllers\IncomeController;
 use App\Http\Controllers\LoansController;
@@ -48,6 +49,13 @@ Route::middleware('auth')->group(function () {
         Route::get('/all/loans', 'AllLons')->name('all.loans');
         Route::post('/store/loans', 'StoreLoans')->name('store.loans');
         Route::delete('/delete/loans/{id}', 'DeleteLoans')->name('delete.loans');
+    });
+
+    // Budgets
+    Route::controller(BudgetsController::class)->group(function () {
+        Route::get('/all/budgets', 'AllBudgets')->name('all.budgets');
+        Route::post('/store/budgets', 'StoreBudgets')->name('store.budgets');
+        // Route::delete('/delete/loans/{id}', 'DeleteLoans')->name('delete.loans');
     });
 
 });

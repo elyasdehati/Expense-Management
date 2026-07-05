@@ -34,10 +34,11 @@
          <span data-i18n="nav_debts">Loans &amp; Debts</span> 
       </a> 
       
-      <button class="sidebar-item w-full text-left px-3 py-2.5 rounded-lg flex items-center gap-3 text-sm" data-view="budgets"> 
+      <a href="{{ route('all.budgets') }}"
+         class="sidebar-item w-full text-left px-3 py-2.5 rounded-lg flex items-center gap-3 text-sm">  
          <i data-lucide="target" style="width:18px;height:18px"></i>
          <span data-i18n="nav_budgets">Budgets</span> 
-      </button> 
+      </a>  
       
       <button class="sidebar-item w-full text-left px-3 py-2.5 rounded-lg flex items-center gap-3 text-sm" data-view="reports"> 
          <i data-lucide="bar-chart-3" style="width:18px;height:18px"></i>
