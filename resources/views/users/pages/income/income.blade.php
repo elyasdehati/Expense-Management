@@ -18,7 +18,7 @@
     <!-- Income List -->
     <div id="income-list" class="space-y-2">
 
-        @foreach($incomes as $income)
+       @foreach($incomes as $income)
             <div class="card-bg rounded-lg p-3 flex items-center justify-between">
                 <div>
                     <p class="text-sm font-medium">{{ $income->source }}</p>
@@ -28,11 +28,24 @@
                 </div>
 
                 <div class="flex items-center gap-2">
+
                     <span class="text-emerald-400 font-bold text-sm">
                         +{{ $income->amount }} {{ $income->currency }}
                     </span>
 
-                    <form method="POST" action="{{ route('income.delete', $income->id) }}" onsubmit="return confirmDelete(event)">
+                    <!-- Save Button -->
+                    <button
+                        type="button"
+                        onclick="openSavingModal('{{ $income->amount }}','{{ $income->currency }}')"
+                        class="p-1 opacity-50 hover:opacity-100"
+                        title="Save">
+                        <i data-lucide="piggy-bank" style="width:14px;height:14px"></i>
+                    </button>
+
+                    <!-- Delete Button -->
+                    <form method="POST"
+                        action="{{ route('income.delete', $income->id) }}"
+                        onsubmit="return confirmDelete(event)">
                         @csrf
                         @method('DELETE')
 
@@ -40,6 +53,7 @@
                             <i data-lucide="trash-2" style="width:14px;height:14px"></i>
                         </button>
                     </form>
+
                 </div>
             </div>
         @endforeach
@@ -132,6 +146,52 @@
     </div>
 </div>
 
+<div id="savingModal" class="fixed inset-0 bg-black/50 hidden items-center justify-center z-50">
+
+    <div class="card-bg rounded-2xl p-5 w-full max-w-md max-h-[75vh] overflow-y-auto relative">
+
+        <div class="flex items-center justify-between mb-4">
+            <h3 class="text-lg font-bold">Add Saving</h3>
+            <button onclick="closeSavingModal()">✕</button>
+        </div>
+
+        <form method="POST" action="{{ route('store.savings') }}" class="space-y-4">
+            @csrf
+
+            <div>
+                <label class="block mb-1 text-sm text-gray-300">Goal Name</label>
+                <input type="text" name="name"
+                    class="w-full p-2 rounded-lg bg-white/5 border border-white/10 text-white"
+                    required>
+            </div>
+
+            <div>
+                <label class="block mb-1 text-sm text-gray-300">Target Amount</label>
+                <input type="number" id="savingAmount" name="amount" step="0.01"
+                    class="w-full p-2 rounded-lg bg-white/5 border border-white/10 text-white"
+                    required>
+            </div>
+
+            <div>
+                <label class="block mb-1 text-sm text-gray-300">Currency</label>
+                <select id="savingCurrency" name="currency"
+                    class="w-full p-2 rounded-lg bg-white/5 border border-white/10 text-white"
+                    required>
+                    <option value="AFG">AFG</option>
+                    <option value="USD">USD</option>
+                    <option value="EUR">EUR</option>
+                </select>
+            </div>
+
+            <button type="submit"
+                class="w-full py-2.5 bg-indigo-600 hover:bg-indigo-700 text-white rounded-lg">
+                Save
+            </button>
+        </form>
+
+    </div>
+</div>
+
 <!-- Scripts -->
 <script>
 function openModal() {
@@ -146,6 +206,22 @@ function closeModal() {
 
 document.getElementById('modal').addEventListener('click', function(e) {
     if (e.target === this) closeModal();
+});
+function openSavingModal(amount, currency) {
+    document.getElementById('savingAmount').value = amount;
+    document.getElementById('savingCurrency').value = currency;
+
+    document.getElementById('savingModal').classList.remove('hidden');
+    document.getElementById('savingModal').classList.add('flex');
+}
+
+function closeSavingModal() {
+    document.getElementById('savingModal').classList.remove('flex');
+    document.getElementById('savingModal').classList.add('hidden');
+}
+
+document.getElementById('savingModal').addEventListener('click', function(e) {
+    if (e.target === this) closeSavingModal();
 });
 </script>
 
