@@ -19,28 +19,27 @@
     <form method="GET" class="flex flex-wrap gap-3 mb-6">
 
         <select name="currency"
-            class="p-2 rounded-lg bg-white/5 border border-white/10 text-white">
-            <option value="" {{ request('currency') == '' ? 'selected' : '' }}>All Currency</option>
-            <option value="AFG" {{ request('currency') == 'AFG' ? 'selected' : '' }}>AFG</option>
-            <option value="USD" {{ request('currency') == 'USD' ? 'selected' : '' }}>USD</option>
-            <option value="EUR" {{ request('currency') == 'EUR' ? 'selected' : '' }}>EUR</option>
+            class=" p-2 rounded-lg bg-white/5 border border-white/10 text-white focus:outline-none focus:border-indigo-500">
+
+            <option value="" class="bg-gray-900" {{ request('currency') == '' ? 'selected' : '' }}>All Currency</option>
+            <option value="AFG" class="bg-gray-900" {{ request('currency') == 'AFG' ? 'selected' : '' }}>AFG</option>
+            <option value="USD" class="bg-gray-900" {{ request('currency') == 'USD' ? 'selected' : '' }}>USD</option>
+            <option value="EUR" class="bg-gray-900" {{ request('currency') == 'EUR' ? 'selected' : '' }}>EUR</option>
+
         </select>
 
         <select name="period"
-            class="p-2 rounded-lg bg-white/5 border border-white/10 text-white">
-            <option value="all" {{ request('period') == 'all' || request('period') == null ? 'selected' : '' }}>All Time</option>
-            <option value="daily" {{ request('period') == 'daily' ? 'selected' : '' }}>Daily</option>
-            <option value="monthly" {{ request('period') == 'monthly' ? 'selected' : '' }}>Monthly</option>
-            <option value="last_month" {{ request('period') == 'last_month' ? 'selected' : '' }}>Last Month</option>
-            <option value="yearly" {{ request('period') == 'yearly' ? 'selected' : '' }}>Yearly</option>
-            <option value="last_year" {{ request('period') == 'last_year' ? 'selected' : '' }}>Last Year</option>
-        </select>
-        {{-- 
-        <button type="submit"
-            class="px-4 py-2 bg-indigo-600 text-white rounded-lg">
-            Filter
-        </button> --}}
+            class="p-2 rounded-lg bg-white/5 border border-white/10 text-white focus:outline-none focus:border-indigo-500">
 
+            <option value="all" class="bg-gray-900" {{ request('period') == 'all' || request('period') == null ? 'selected' : '' }}>All Time</option>
+            <option value="daily" class="bg-gray-900" {{ request('period') == 'daily' ? 'selected' : '' }}>Daily</option>
+            <option value="monthly" class="bg-gray-900" {{ request('period') == 'monthly' ? 'selected' : '' }}>Monthly</option>
+            <option value="last_month" class="bg-gray-900" {{ request('period') == 'last_month' ? 'selected' : '' }}>Last Month</option>
+            <option value="yearly" class="bg-gray-900" {{ request('period') == 'yearly' ? 'selected' : '' }}>Yearly</option>
+            <option value="last_year" class="bg-gray-900" {{ request('period') == 'last_year' ? 'selected' : '' }}>Last Year</option>
+
+        </select>
+        
     </form>
 
     <!-- Stats -->
