@@ -31,7 +31,22 @@ const chart = new Chart(ctx, {
         labels: ['Income', 'Expense', 'Saving'],
         datasets: [{
             label: 'Amount',
-            data: reportData.AFG
+            data: reportData.AFG,
+
+            backgroundColor: [
+                '#22c55e', // Income (سبز)
+                '#ef4444', // Expense (قرمز)
+                '#3b82f6'  // Saving (آبی)
+            ],
+
+            borderColor: [
+                '#16a34a',
+                '#dc2626',
+                '#2563eb'
+            ],
+
+            borderWidth: 1,
+            borderRadius: 8
         }]
     },
     options: {
