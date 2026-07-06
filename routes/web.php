@@ -5,6 +5,7 @@ use App\Http\Controllers\ExpenseController;
 use App\Http\Controllers\IncomeController;
 use App\Http\Controllers\LoansController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\ReportController;
 use App\Http\Controllers\SavingController;
 use Illuminate\Support\Facades\Route;
 
@@ -57,6 +58,11 @@ Route::middleware('auth')->group(function () {
         Route::get('/all/budgets', 'AllBudgets')->name('all.budgets');
         Route::post('/store/budgets', 'StoreBudgets')->name('store.budgets');
         Route::delete('/delete/budgets/{id}', 'DeleteBudgets')->name('delete.budgets');
+    });
+
+    // Reports
+    Route::controller(ReportController::class)->group(function () {
+        Route::get('/all/reports', 'AllReports')->name('all.reports');
     });
 
 });

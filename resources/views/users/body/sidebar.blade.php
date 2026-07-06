@@ -40,9 +40,11 @@
          <span data-i18n="nav_budgets">Budgets</span> 
       </a>  
       
-      <button class="sidebar-item w-full text-left px-3 py-2.5 rounded-lg flex items-center gap-3 text-sm" data-view="reports"> 
+      
+      <a href="{{ route('all.reports') }}"
+         class="sidebar-item w-full text-left px-3 py-2.5 rounded-lg flex items-center gap-3 text-sm">
          <i data-lucide="bar-chart-3" style="width:18px;height:18px"></i>
          <span data-i18n="nav_reports">Reports</span> 
-      </button>
+      </a>
    </nav>
   </aside>
