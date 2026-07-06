@@ -8,7 +8,7 @@
     <div class="flex items-center justify-between mb-6">
         <h2 class="text-2xl font-bold">Income</h2>
 
-        <button onclick="openModal()"
+        <button onclick="openIncomeModal()"
             class="px-4 py-2 bg-indigo-600 text-white rounded-lg text-sm font-medium flex items-center gap-2">
             <i data-lucide="plus" style="width:16px;height:16px"></i>
             Add
@@ -36,7 +36,7 @@
                     <!-- Save Button -->
                     <button
                         type="button"
-                        onclick="openSavingModal('{{ $income->amount }}','{{ $income->currency }}')"
+                        onclick="openSavingModal('{{ $income->id }}','{{ $income->amount }}','{{ $income->currency }}')"
                         class="p-1 opacity-50 hover:opacity-100"
                         title="Save">
                         <i data-lucide="piggy-bank" style="width:14px;height:14px"></i>
@@ -62,29 +62,26 @@
 
 </section>
 
-<!-- Modal -->
-<div id="modal" class="fixed inset-0 bg-black/50 hidden items-center justify-center z-50">
+<!-- Income Modal -->
+<div id="incomeModal" class="fixed inset-0 bg-black/50 hidden items-center justify-center z-50">
 
     <div class="card-bg rounded-2xl p-5 w-full max-w-md max-h-[75vh] overflow-y-auto relative">
 
-        <!-- Header -->
         <div class="flex items-center justify-between mb-4">
             <h3 class="text-lg font-bold">Add Income</h3>
-            <button onclick="closeModal()">✕</button>
+            <button onclick="closeIncomeModal()">✕</button>
         </div>
 
         <form method="POST" action="{{ route('income.store') }}" class="space-y-4">
             @csrf
 
-            <!-- Amount -->
             <div>
                 <label class="block mb-1 text-sm text-gray-300">Amount</label>
                 <input type="number" name="amount" step="0.01"
-                    class="w-full p-2 rounded-lg bg-white/5 border border-white/10 text-white placeholder-gray-400 focus:outline-none focus:border-indigo-500" placeholder="Amount"
+                    class="w-full p-2 rounded-lg bg-white/5 border border-white/10 text-white placeholder-gray-400 focus:outline-none focus:border-indigo-500"
                     required>
             </div>
 
-            <!-- Currency -->
             <div>
                 <label class="block mb-1 text-sm text-gray-300">Currency</label>
                 <select name="currency"
@@ -96,7 +93,6 @@
                 </select>
             </div>
 
-            <!-- Category -->
             <div>
                 <label class="block mb-1 text-sm text-gray-300">Category</label>
                 <select name="category"
@@ -112,40 +108,38 @@
                 </select>
             </div>
 
-            <!-- Source -->
             <div>
                 <label class="block mb-1 text-sm text-gray-300">Source</label>
                 <input type="text" name="source"
-                    class="w-full p-2 rounded-lg bg-white/5 border border-white/10 text-white placeholder-gray-400 focus:outline-none focus:border-indigo-500" placeholder="Source"
+                    class="w-full p-2 rounded-lg bg-white/5 border border-white/10 text-white"
                     required>
             </div>
 
-            <!-- Note -->
             <div>
                 <label class="block mb-1 text-sm text-gray-300">Note</label>
                 <textarea name="note" rows="2"
-                    class="w-full p-2 rounded-lg bg-white/5 border border-white/10 text-white placeholder-gray-400 focus:outline-none focus:border-indigo-500" placeholder="Note"></textarea>
+                    class="w-full p-2 rounded-lg bg-white/5 border border-white/10 text-white"></textarea>
             </div>
 
-            <!-- Date -->
             <div>
                 <label class="block mb-1 text-sm text-gray-300">Date</label>
                 <input type="date" name="date"
                     value="{{ date('Y-m-d') }}"
-                    class="w-full p-2 rounded-lg bg-white/5 border border-white/10 text-white focus:outline-none focus:border-indigo-500"
+                    class="w-full p-2 rounded-lg bg-white/5 border border-white/10 text-white"
                     required>
             </div>
 
-            <!-- Submit -->
             <button type="submit"
-                class="w-full py-2.5 bg-indigo-600 hover:bg-indigo-700 text-white rounded-lg font-medium transition">
+                class="w-full py-2.5 bg-indigo-600 hover:bg-indigo-700 text-white rounded-lg font-medium">
                 Save
             </button>
+
         </form>
 
     </div>
 </div>
 
+<!-- Saving Modal -->
 <div id="savingModal" class="fixed inset-0 bg-black/50 hidden items-center justify-center z-50">
 
     <div class="card-bg rounded-2xl p-5 w-full max-w-md max-h-[75vh] overflow-y-auto relative">
@@ -159,34 +153,47 @@
             @csrf
 
             <div>
-                <label class="block mb-1 text-sm text-gray-300">Goal Name</label>
-                <input type="text" name="name"
-                    class="w-full p-2 rounded-lg bg-white/5 border border-white/10 text-white"
-                    required>
+                <label class="block mb-1 text-sm text-gray-300">Income Amount</label>
+                <input type="text" id="incomePreview"
+                    class="w-full p-2 rounded-lg bg-white/10 border border-white/10 text-gray-300"
+                    readonly>
             </div>
 
             <div>
-                <label class="block mb-1 text-sm text-gray-300">Target Amount</label>
+                <label class="block mb-1 text-sm text-gray-300">Amount</label>
                 <input type="number" id="savingAmount" name="amount" step="0.01"
                     class="w-full p-2 rounded-lg bg-white/5 border border-white/10 text-white"
                     required>
+
+                <input type="hidden" id="savingIncomeId" name="income_id">
+
+                <!-- ✅ NEW: hidden currency for fix -->
+                <input type="hidden" id="savingCurrencyHidden" name="currency">
             </div>
 
             <div>
                 <label class="block mb-1 text-sm text-gray-300">Currency</label>
-                <select id="savingCurrency" name="currency"
-                    class="w-full p-2 rounded-lg bg-white/5 border border-white/10 text-white"
-                    required>
-                    <option value="AFG">AFG</option>
-                    <option value="USD">USD</option>
-                    <option value="EUR">EUR</option>
+                <select id="savingCurrency"
+                    class="w-full p-2 rounded-lg bg-white/5 border border-white/10 text-white">
+                    <option value="AFG" class="bg-gray-900">AFG</option>
+                    <option value="USD" class="bg-gray-900">USD</option>
+                    <option value="EUR" class="bg-gray-900">EUR</option>
                 </select>
             </div>
 
+            <div>
+                <label class="block mb-1 text-sm text-gray-300">Date</label>
+                <input type="date" name="date"
+                    value="{{ date('Y-m-d') }}"
+                    class="w-full p-2 rounded-lg bg-white/5 border border-white/10 text-white"
+                    required>
+            </div>
+
             <button type="submit"
-                class="w-full py-2.5 bg-indigo-600 hover:bg-indigo-700 text-white rounded-lg">
+                class="w-full py-2.5 bg-indigo-600 hover:bg-indigo-700 text-white rounded-lg font-medium">
                 Save
             </button>
+
         </form>
 
     </div>
@@ -194,35 +201,45 @@
 
 <!-- Scripts -->
 <script>
-function openModal() {
-    document.getElementById('modal').classList.remove('hidden');
-    document.getElementById('modal').classList.add('flex');
-}
+    function openIncomeModal() {
+        document.getElementById('incomeModal').classList.remove('hidden');
+        document.getElementById('incomeModal').classList.add('flex');
+    }
 
-function closeModal() {
-    document.getElementById('modal').classList.remove('flex');
-    document.getElementById('modal').classList.add('hidden');
-}
+    function closeIncomeModal() {
+        document.getElementById('incomeModal').classList.remove('flex');
+        document.getElementById('incomeModal').classList.add('hidden');
+    }
 
-document.getElementById('modal').addEventListener('click', function(e) {
-    if (e.target === this) closeModal();
-});
-function openSavingModal(amount, currency) {
-    document.getElementById('savingAmount').value = amount;
-    document.getElementById('savingCurrency').value = currency;
+    document.getElementById('incomeModal').addEventListener('click', function(e) {
+        if (e.target === this) closeIncomeModal();
+    });
 
-    document.getElementById('savingModal').classList.remove('hidden');
-    document.getElementById('savingModal').classList.add('flex');
-}
+    function openSavingModal(incomeId, amount, currency) {
 
-function closeSavingModal() {
-    document.getElementById('savingModal').classList.remove('flex');
-    document.getElementById('savingModal').classList.add('hidden');
-}
+        document.getElementById('savingIncomeId').value = incomeId;
+        document.getElementById('incomePreview').value = amount;
 
-document.getElementById('savingModal').addEventListener('click', function(e) {
-    if (e.target === this) closeSavingModal();
-});
+        const savingCurrency = document.getElementById('savingCurrency');
+        const hiddenCurrency = document.getElementById('savingCurrencyHidden');
+
+        savingCurrency.value = currency;
+        hiddenCurrency.value = currency;
+
+        const modal = document.getElementById('savingModal');
+        modal.classList.remove('hidden');
+        modal.classList.add('flex');
+    }
+
+    function closeSavingModal() {
+        const modal = document.getElementById('savingModal');
+        modal.classList.remove('flex');
+        modal.classList.add('hidden');
+    }
+
+    document.getElementById('savingModal').addEventListener('click', function(e) {
+        if (e.target === this) closeSavingModal();
+    });
 </script>
 
 @endsection

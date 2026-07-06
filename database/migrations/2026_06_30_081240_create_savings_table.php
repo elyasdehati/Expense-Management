@@ -13,10 +13,10 @@ return new class extends Migration
     {
         Schema::create('savings', function (Blueprint $table) {
             $table->id();
-            $table->string('name');
-            $table->decimal('amount', 15, 2);
-            $table->decimal('saving', 15, 2)->nullable();
-            $table->enum('currency', ['AFG', 'USD', 'EUR']);
+            $table->foreignId('income_id')->nullable()->constrained()->nullOnDelete();
+            $table->decimal('amount', 12, 2);
+            $table->string('currency', 10);
+            $table->date('date');
             $table->timestamps();
         });
     }

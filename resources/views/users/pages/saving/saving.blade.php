@@ -2,7 +2,7 @@
 
 @section('user')
 
-<section id="view-income">
+<section id="view-savings">
 
     <!-- Header -->
     <div class="flex items-center justify-between mb-6">
@@ -15,178 +15,182 @@
         </button>
     </div>
 
-    <!-- Income List -->
-    <div id="income-list" class="space-y-2">
+    <!-- FILTER -->
+    <form method="GET" class="flex flex-wrap gap-3 mb-6">
 
-        @foreach($savings as $saving)
-            <div class="card-bg rounded-xl p-4">
+        <select name="currency"
+            class="p-2 rounded-lg bg-white/5 border border-white/10 text-white">
+            <option value="" {{ request('currency') == '' ? 'selected' : '' }}>All Currency</option>
+            <option value="AFG" {{ request('currency') == 'AFG' ? 'selected' : '' }}>AFG</option>
+            <option value="USD" {{ request('currency') == 'USD' ? 'selected' : '' }}>USD</option>
+            <option value="EUR" {{ request('currency') == 'EUR' ? 'selected' : '' }}>EUR</option>
+        </select>
 
-                <div class="flex justify-between items-center mb-2">
-                    <p class="font-semibold text-sm">{{ $saving->name }}</p>
+        <select name="period"
+            class="p-2 rounded-lg bg-white/5 border border-white/10 text-white">
+            <option value="all" {{ request('period') == 'all' || request('period') == null ? 'selected' : '' }}>All Time</option>
+            <option value="daily" {{ request('period') == 'daily' ? 'selected' : '' }}>Daily</option>
+            <option value="monthly" {{ request('period') == 'monthly' ? 'selected' : '' }}>Monthly</option>
+            <option value="last_month" {{ request('period') == 'last_month' ? 'selected' : '' }}>Last Month</option>
+            <option value="yearly" {{ request('period') == 'yearly' ? 'selected' : '' }}>Yearly</option>
+            <option value="last_year" {{ request('period') == 'last_year' ? 'selected' : '' }}>Last Year</option>
+        </select>
+{{-- 
+        <button type="submit"
+            class="px-4 py-2 bg-indigo-600 text-white rounded-lg">
+            Filter
+        </button> --}}
 
-                    <span class="text-xs opacity-60">
-                        {{ $saving->saving ?? 0 }} / {{ $saving->amount }} {{ $saving->currency }}
+    </form>
+
+    <!-- Stats -->
+    <div class="grid grid-cols-2 md:grid-cols-3 gap-4 mb-6">
+
+        <div class="card-bg rounded-lg p-4">
+            <p class="text-xs opacity-50">AFG Total</p>
+            <h3 class="text-lg font-bold">
+                {{ $savings->where('currency','AFG')->sum('amount') }}
+            </h3>
+        </div>
+
+        <div class="card-bg rounded-lg p-4">
+            <p class="text-xs opacity-50">USD Total</p>
+            <h3 class="text-lg font-bold">
+                {{ $savings->where('currency','USD')->sum('amount') }}
+            </h3>
+        </div>
+
+        <div class="card-bg rounded-lg p-4">
+            <p class="text-xs opacity-50">EUR Total</p>
+            <h3 class="text-lg font-bold">
+                {{ $savings->where('currency','EUR')->sum('amount') }}
+            </h3>
+        </div>
+
+    </div>
+
+    <!-- Saving List -->
+    <div class="space-y-2">
+
+        @forelse($savings as $saving)
+
+            <div class="card-bg rounded-lg p-3 flex items-center justify-between">
+
+                <div>
+                    <p class="text-sm font-medium">
+                        From: {{ $saving->income->source ?? 'No Income' }} - {{ $saving->income->category ?? 'No Income' }}
+                    </p>
+
+                    <p class="text-xs opacity-50">
+                        {{ $saving->date }}
+                    </p>
+                </div>
+
+                <div class="flex items-center gap-2">
+
+                    <span class="text-cyan-400 font-bold text-sm">
+                        {{ $saving->amount }} {{ $saving->currency }}
                     </span>
-                </div>
 
-                @php
-                    $percent = $saving->amount > 0 ? (($saving->saving ?? 0) / $saving->amount) * 100 : 0;
-                @endphp
+                    <form method="POST"
+                        action="{{ route('delete.saving', $saving->id) }}"
+                        onsubmit="return confirmDelete(event)">
+                        @csrf
+                        @method('DELETE')
 
-                <div class="w-full h-2 rounded-full bg-white/10 overflow-hidden">
-                    <div class="progress-bar h-full rounded-full bg-gradient-to-r from-indigo-500 to-purple-500"
-                        style="width:{{ $percent }}%"></div>
-                </div>
-
-                <div class="flex justify-between items-center mt-2">
-                    <span class="text-xs opacity-50">{{ round($percent) }}%</span>
-
-                    <div class="flex items-center gap-2">
-
-                        <button onclick="openDepositModal({{ $saving->id }}, {{ $saving->amount ?? 0 }}, {{ $saving->saving ?? 0 }})"
-                                class="text-xs text-indigo-400">
-                            Deposit
+                        <button type="submit" class="p-1 opacity-50 hover:opacity-100">
+                            <i data-lucide="trash-2" style="width:14px;height:14px"></i>
                         </button>
+                    </form>
 
-                        <form method="POST" action="{{ route('delete.saving', $saving->id) }}" onsubmit="return confirmDelete(event)">
-                            @csrf
-                            @method('DELETE')
-
-                            <button type="submit" class="p-1 opacity-50 hover:opacity-100">
-                                <i data-lucide="trash-2" style="width:14px;height:14px"></i>
-                            </button>
-                        </form>
-
-                    </div>
                 </div>
 
             </div>
-        @endforeach
+
+        @empty
+
+            <div class="card-bg rounded-lg p-6 text-center opacity-50">
+                No savings found.
+            </div>
+
+        @endforelse
 
     </div>
 
 </section>
 
-<!-- Modal -->
+<!-- Add Saving Modal -->
 <div id="modal" class="fixed inset-0 bg-black/50 hidden items-center justify-center z-50">
 
     <div class="card-bg rounded-2xl p-5 w-full max-w-md max-h-[75vh] overflow-y-auto relative">
 
-        <!-- Header -->
         <div class="flex items-center justify-between mb-4">
             <h3 class="text-lg font-bold">Add Saving</h3>
-            <button onclick="closeModal()">✕</button>
+            <button type="button" onclick="closeModal()">✕</button>
         </div>
 
         <form method="POST" action="{{ route('store.savings') }}" class="space-y-4">
             @csrf
 
-            <!-- Goal-Name -->
             <div>
-                <label class="block mb-1 text-sm text-gray-300">Goal Name</label>
-                <input type="text" name="name"
-                    class="w-full p-2 rounded-lg bg-white/5 border border-white/10 text-white placeholder-gray-400 focus:outline-none focus:border-indigo-500" placeholder="Goal Name"
-                    required>
-            </div>
-
-            <!-- Target-Amount -->
-            <div>
-                <label class="block mb-1 text-sm text-gray-300">Target Amount</label>
+                <label class="block mb-1 text-sm text-gray-300">Amount</label>
                 <input type="number" name="amount" step="0.01"
-                    class="w-full p-2 rounded-lg bg-white/5 border border-white/10 text-white placeholder-gray-400 focus:outline-none focus:border-indigo-500" placeholder="Target Amount"
-                    required>
+                    class="w-full p-2 rounded-lg bg-white/5 border border-white/10 text-white"
+                    placeholder="Amount" required>
             </div>
 
-            <!-- Currency -->
             <div>
                 <label class="block mb-1 text-sm text-gray-300">Currency</label>
                 <select name="currency"
-                    class="w-full p-2 rounded-lg bg-white/5 border border-white/10 text-white focus:outline-none focus:border-indigo-500"
-                    required>
-                    <option value="AFG" class="bg-gray-900">AFG</option>
-                    <option value="USD" class="bg-gray-900">USD</option>
-                    <option value="EUR" class="bg-gray-900">EUR</option>
+                    class="w-full p-2 rounded-lg bg-white/5 border border-white/10 text-white" required>
+                    <option value="AFG">AFG</option>
+                    <option value="USD">USD</option>
+                    <option value="EUR">EUR</option>
                 </select>
             </div>
 
-            <!-- Submit -->
-            <button type="submit"
-                class="w-full py-2.5 bg-indigo-600 hover:bg-indigo-700 text-white rounded-lg font-medium transition">
-                Save
-            </button>
-        </form>
-
-    </div>
-</div>
-
-<div id="deposit-modal" class="fixed inset-0 bg-black/50 hidden items-center justify-center z-50">
-    <div class="card-bg rounded-2xl p-5 w-full max-w-md">
-
-        <div class="flex justify-between mb-4">
-            <h3 class="text-lg font-bold">Deposit</h3>
-            <button onclick="closeDepositModal()">✕</button>
-        </div>
-
-        <form method="POST" action="{{ route('deposit.savings') }}">
-            @csrf
-
-            <input type="hidden" name="saving_id" id="saving_id">
-
-            <!-- Target -->
             <div>
-                <label class="text-sm text-gray-300">Target Amount</label>
-                <input type="number" id="target_amount" class="w-full p-2 bg-white/5 rounded-lg" readonly>
+                <label class="block mb-1 text-sm text-gray-300">Date</label>
+                <input type="date" name="date"
+                    value="{{ date('Y-m-d') }}"
+                    class="w-full p-2 rounded-lg bg-white/5 border border-white/10 text-white"
+                    required>
             </div>
 
-            <!-- Current -->
-            <div class="mt-3">
-                <label class="text-sm text-gray-300">Current Saving</label>
-                <input type="number" id="current_amount" class="w-full p-2 bg-white/5 rounded-lg" readonly>
-            </div>
-
-            <!-- Add -->
-            <div class="mt-3">
-                <label class="text-sm text-gray-300">Add Amount</label>
-                <input type="number" name="add_amount" class="w-full p-2 bg-white/5 rounded-lg" required>
-            </div>
-
-            <button class="w-full mt-4 bg-indigo-600 py-2 rounded-lg text-white">
+            <button type="submit"
+                class="w-full py-2.5 bg-indigo-600 hover:bg-indigo-700 text-white rounded-lg font-medium">
                 Save
             </button>
+
         </form>
 
     </div>
+
 </div>
 
-<!-- Scripts -->
 <script>
-function openModal() {
-    document.getElementById('modal').classList.remove('hidden');
-    document.getElementById('modal').classList.add('flex');
-}
+    function openModal() {
+        document.getElementById('modal').classList.remove('hidden');
+        document.getElementById('modal').classList.add('flex');
+    }
 
-function closeModal() {
-    document.getElementById('modal').classList.remove('flex');
-    document.getElementById('modal').classList.add('hidden');
-}
+    function closeModal() {
+        document.getElementById('modal').classList.remove('flex');
+        document.getElementById('modal').classList.add('hidden');
+    }
 
-document.getElementById('modal').addEventListener('click', function(e) {
-    if (e.target === this) closeModal();
-});
+    document.getElementById('modal').addEventListener('click', function(e) {
+        if (e.target === this) closeModal();
+    });
 
-function openDepositModal(id, target, current) {
-    document.getElementById('deposit-modal').classList.remove('hidden');
-    document.getElementById('deposit-modal').classList.add('flex');
-
-    document.getElementById('saving_id').value = id;
-    document.getElementById('target_amount').value = target;
-    document.getElementById('current_amount').value = current;
-}
-
-function closeDepositModal() {
-    document.getElementById('deposit-modal').classList.add('hidden');
-    document.getElementById('deposit-modal').classList.remove('flex');
-}
+    document.querySelectorAll('select[name="currency"], select[name="period"]').forEach((el) => {
+        el.addEventListener('change', function () {
+            const form = this.closest('form');
+            if (form) {
+                form.submit();
+            }
+        });
+    });
 </script>
 
 @endsection
