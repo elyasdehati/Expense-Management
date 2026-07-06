@@ -35,7 +35,7 @@
             <option value="yearly" {{ request('period') == 'yearly' ? 'selected' : '' }}>Yearly</option>
             <option value="last_year" {{ request('period') == 'last_year' ? 'selected' : '' }}>Last Year</option>
         </select>
-{{-- 
+        {{-- 
         <button type="submit"
             class="px-4 py-2 bg-indigo-600 text-white rounded-lg">
             Filter
@@ -91,6 +91,12 @@
                     <span class="text-cyan-400 font-bold text-sm">
                         {{ $saving->amount }} {{ $saving->currency }}
                     </span>
+
+                    <button
+                        onclick="openWithdrawModal({{ $saving->id }}, '{{ $saving->currency }}', {{ $saving->amount }})"
+                        class="px-2 py-1 bg-red-600 text-white rounded text-xs">
+                        Withdraw
+                    </button>
 
                     <form method="POST"
                         action="{{ route('delete.saving', $saving->id) }}"
@@ -168,6 +174,52 @@
 
 </div>
 
+<!-- Withdraw Modal -->
+<div id="withdrawModal" class="fixed inset-0 bg-black/50 hidden items-center justify-center z-50">
+
+    <div class="card-bg rounded-2xl p-5 w-full max-w-md relative">
+
+        <div class="flex items-center justify-between mb-4">
+            <h3 class="text-lg font-bold">Withdraw Saving</h3>
+            <button type="button" onclick="closeWithdrawModal()">✕</button>
+        </div>
+
+        <form method="POST" action="{{ route('withdraw.saving') }}" class="space-y-4">
+            @csrf
+
+            <input type="hidden" id="withdraw_saving_id" name="saving_id">
+
+            <div>
+                <label class="block mb-1 text-sm text-gray-300">Available Balance</label>
+                <div id="available_balance"
+                    class="w-full p-2 rounded-lg bg-white/5 border border-white/10 text-cyan-400 font-bold">
+                </div>
+            </div>
+
+            <div>
+                <label class="block mb-1 text-sm text-gray-300">Withdraw Amount</label>
+                <input
+                    type="number"
+                    name="amount"
+                    step="0.01"
+                    min="0.01"
+                    class="w-full p-2 rounded-lg bg-white/5 border border-white/10 text-white"
+                    placeholder="Enter amount"
+                    required>
+            </div>
+
+            <button
+                type="submit"
+                class="w-full py-2.5 bg-red-600 hover:bg-red-700 text-white rounded-lg font-medium">
+                Withdraw
+            </button>
+
+        </form>
+
+    </div>
+
+</div>
+
 <script>
     function openModal() {
         document.getElementById('modal').classList.remove('hidden');
@@ -190,6 +242,23 @@
                 form.submit();
             }
         });
+    });
+
+    function openWithdrawModal(id, currency, amount) {
+        document.getElementById('withdraw_saving_id').value = id;
+        document.getElementById('available_balance').innerText = amount + ' ' + currency;
+
+        document.getElementById('withdrawModal').classList.remove('hidden');
+        document.getElementById('withdrawModal').classList.add('flex');
+    }
+
+    function closeWithdrawModal() {
+        document.getElementById('withdrawModal').classList.remove('flex');
+        document.getElementById('withdrawModal').classList.add('hidden');
+    }
+
+    document.getElementById('withdrawModal').addEventListener('click', function(e) {
+        if (e.target === this) closeWithdrawModal();
     });
 </script>
 

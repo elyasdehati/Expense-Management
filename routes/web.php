@@ -42,6 +42,7 @@ Route::middleware('auth')->group(function () {
         Route::post('/store/savings', 'StoreSavings')->name('store.savings');
         Route::post('/deposit/savings', 'Deposit')->name('deposit.savings');
         Route::delete('/delete/saving/{id}', 'DeleteSaving')->name('delete.saving');
+        Route::post('/saving/withdraw', 'Withdraw')->name('withdraw.saving');
     });
 
     // Loans

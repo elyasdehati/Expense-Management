@@ -111,4 +111,24 @@ class SavingController extends Controller
 
         return redirect()->back()->with('success', 'Saving deleted successfully.');
     }
+
+    // Withdraw
+    public function Withdraw(Request $request)
+    {
+        $request->validate([
+            'saving_id' => 'required|exists:savings,id',
+            'amount' => 'required|numeric|min:0.01',
+        ]);
+
+        $saving = Saving::findOrFail($request->saving_id);
+
+        if ($request->amount > $saving->amount) {
+            return back()->with('error', 'Insufficient saving.');
+        }
+
+        $saving->amount -= $request->amount;
+        $saving->save();
+
+        return back()->with('success', 'Withdraw successful.');
+    }
 }
