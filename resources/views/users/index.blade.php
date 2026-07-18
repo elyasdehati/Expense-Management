@@ -102,6 +102,10 @@ async function loadRates() {
 }
 
 loadRates();
+
+document.getElementById('refresh-rates-btn').addEventListener('click', () => {
+    loadRates();
+});
 </script>
 
 @endsection
