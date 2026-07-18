@@ -83,4 +83,25 @@
      </div>
 </section>
 
+<script>
+async function loadRates() {
+    let response = await fetch('https://api.exchangerate-api.com/v4/latest/USD');
+    let data = await response.json();
+
+    document.getElementById('rate-usd-afn').innerText =
+        data.rates.AFN.toFixed(2);
+
+    document.getElementById('rate-eur-afn').innerText =
+        (data.rates.AFN / data.rates.EUR).toFixed(2);
+
+    document.getElementById('rate-eur-usd').innerText =
+        (1 / data.rates.EUR).toFixed(2);
+
+    document.getElementById('rates-timestamp').innerText =
+        "Last updated: " + new Date().toLocaleString();
+}
+
+loadRates();
+</script>
+
 @endsection
