@@ -7,6 +7,8 @@ use App\Http\Controllers\LoansController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\ReportController;
 use App\Http\Controllers\SavingController;
+use App\Models\Expense;
+use App\Models\Income;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
@@ -14,7 +16,14 @@ Route::get('/', function () {
 });
 
 Route::get('/dashboard', function () {
-    return view('users.index');
+    $currencies = ['AFG', 'USD', 'EUR'];
+    $balances = [];
+    foreach ($currencies as $currency) {
+        $income = Income::where('currency', $currency)->sum('amount');
+        $expense = Expense::where('currency', $currency)->sum('amount');
+        $balances[$currency] = $income - $expense;
+    }
+    return view('users.index', compact('balances'));
 })->middleware(['auth', 'verified'])->name('dashboard');
 
 Route::middleware('auth')->group(function () {

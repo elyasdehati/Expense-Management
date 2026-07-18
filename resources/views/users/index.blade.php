@@ -6,17 +6,17 @@
      <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
       <div data-template-id="wallet-afn" class="canva-card wallet-card rounded-2xl p-5 bg-gradient-to-br from-indigo-600 to-purple-700 text-white">
        <p class="text-xs opacity-80 mb-1">AFN</p>
-       <p class="text-2xl font-bold" id="bal-afn">0.00</p>
+       <p class="text-2xl font-bold" id="bal-afn">{{ $balances['AFG'] }}</p>
        <p class="text-xs opacity-60 mt-2">Afghan Afghani</p>
       </div>
       <div data-template-id="wallet-usd" class="canva-card wallet-card rounded-2xl p-5 bg-gradient-to-br from-emerald-600 to-teal-700 text-white">
        <p class="text-xs opacity-80 mb-1">USD</p>
-       <p class="text-2xl font-bold" id="bal-usd">0.00</p>
+       <p class="text-2xl font-bold" id="bal-usd">{{ $balances['USD'] }}</p>
        <p class="text-xs opacity-60 mt-2">US Dollar</p>
       </div>
       <div data-template-id="wallet-eur" class="canva-card wallet-card rounded-2xl p-5 bg-gradient-to-br from-amber-500 to-orange-600 text-white">
        <p class="text-xs opacity-80 mb-1">EUR</p>
-       <p class="text-2xl font-bold" id="bal-eur">0.00</p>
+       <p class="text-2xl font-bold" id="bal-eur">{{ $balances['EUR'] }}</p>
        <p class="text-xs opacity-60 mt-2">Euro</p>
       </div>
      </div><!-- Exchange Rates -->
