@@ -65,22 +65,27 @@
       <h3 data-template-id="ai-insight-title" class="canva-text text-sm font-semibold mb-2 flex items-center gap-2"><i data-lucide="sparkles" style="width:16px;height:16px;color:#a78bfa"></i></h3>
       <p class="text-sm opacity-80" id="ai-insight-text">Add transactions to receive personalized insights.</p>
      </div><!-- Charts -->
+
      <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
       <div class="card-bg rounded-xl p-4">
        <h4 data-template-id="analytics-section-title" class="canva-text text-sm font-semibold mb-3"></h4>
-       <canvas id="chart-category" height="200"></canvas>
+       <div style="height:380px; width:380px; margin:auto;">
+            <canvas id="chart-income-expense"></canvas>
+        </div>
       </div>
       <div class="card-bg rounded-xl p-4">
        <h4 class="text-sm font-semibold mb-3" data-i18n="chart_trend">Income vs Expenses</h4>
        <canvas id="chart-trend" height="200"></canvas>
       </div>
      </div><!-- Recent Transactions -->
+
      <div class="card-bg rounded-xl p-4">
       <h4 data-template-id="recent-section-title" class="canva-text text-sm font-semibold mb-3"></h4>
       <div id="recent-list" class="space-y-2 max-h-64 overflow-y-auto">
        <p class="text-sm opacity-50 text-center py-4" data-i18n="no_transactions">No transactions yet</p>
       </div>
      </div>
+
 </section>
 
 <script>
@@ -156,6 +161,38 @@
             }
         }
     });
+
+    new Chart(document.getElementById('chart-income-expense'), {
+        type: 'pie',
+        data: {
+            labels: [
+                'Income',
+                'Expense'
+            ],
+            datasets: [
+                {
+                    data: [
+                        {{ array_sum($incomeChart) }},
+                        {{ abs(array_sum($expenseChart)) }}
+                    ],
+                    borderWidth: 2
+                }
+            ]
+        },
+        options: {
+            responsive: true,
+            plugins: {
+                tooltip: {
+                    callbacks: {
+                        label: function(context) {
+                            return context.label + ': ' + context.raw;
+                        }
+                    }
+                }
+            }
+        }
+    });
+
     loadRates();
     document.getElementById('refresh-rates-btn')
     .addEventListener('click', () => {

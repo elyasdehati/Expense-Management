@@ -16,67 +16,35 @@ Route::get('/', function () {
 });
 
 Route::get('/dashboard', function () {
-
     $currencies = ['AFG', 'USD', 'EUR'];
-
     $balances = [];
-
     foreach ($currencies as $currency) {
-
         $income = Income::where('currency', $currency)->sum('amount');
-
         $expense = Expense::where('currency', $currency)->sum('amount');
-
         $balances[$currency] = $income - $expense;
     }
-
-
     // Last 7 Days Chart Data
-
     $chartDates = [];
     $incomeChart = [];
     $expenseChart = [];
-
-
     $currentDate = \Carbon\Carbon::now()->subDays(6);
-
     $endDate = \Carbon\Carbon::now();
-
-
     while ($currentDate <= $endDate) {
-
         $date = $currentDate->format('Y-m-d');
 
-
         // show date like: 1 Jun
-
         $chartDates[] = $currentDate->format('j M');
-
-
         $dailyIncome = Income::where('date', $date)->sum('amount');
-
         $dailyExpense = Expense::where('date', $date)->sum('amount');
-
-
         $incomeChart[] = $dailyIncome;
-
         $expenseChart[] = -$dailyExpense;
-
-
         $currentDate->addDay();
     }
-
-
     return view('users.index', compact(
-
         'balances',
-
         'chartDates',
-
         'incomeChart',
-
         'expenseChart'
-
     ));
 
 })->middleware(['auth', 'verified'])->name('dashboard');
