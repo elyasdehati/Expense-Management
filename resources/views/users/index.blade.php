@@ -84,28 +84,83 @@
 </section>
 
 <script>
-async function loadRates() {
-    let response = await fetch('https://api.exchangerate-api.com/v4/latest/USD');
-    let data = await response.json();
 
-    document.getElementById('rate-usd-afn').innerText =
-        data.rates.AFN.toFixed(2);
+    async function loadRates() {
+        let response = await fetch('https://api.exchangerate-api.com/v4/latest/USD');
+        let data = await response.json();
+        document.getElementById('rate-usd-afn').innerText =
+            data.rates.AFN.toFixed(2);
+        document.getElementById('rate-eur-afn').innerText =
+            (data.rates.AFN / data.rates.EUR).toFixed(2);
+        document.getElementById('rate-eur-usd').innerText =
+            (1 / data.rates.EUR).toFixed(2);
+        document.getElementById('rates-timestamp').innerText =
+            "Last updated: " + new Date().toLocaleString();
+    }
 
-    document.getElementById('rate-eur-afn').innerText =
-        (data.rates.AFN / data.rates.EUR).toFixed(2);
+    // Chart Data
+    let incomeValues = @json($incomeChart);
+    let expenseValues = @json($expenseChart);
 
-    document.getElementById('rate-eur-usd').innerText =
-        (1 / data.rates.EUR).toFixed(2);
-
-    document.getElementById('rates-timestamp').innerText =
-        "Last updated: " + new Date().toLocaleString();
-}
-
-loadRates();
-
-document.getElementById('refresh-rates-btn').addEventListener('click', () => {
+    // Make zero stay in the middle
+    let maxValue = Math.max(
+        Math.max(...incomeValues),
+        Math.abs(Math.min(...expenseValues))
+    );
+    new Chart(document.getElementById('chart-trend'), {
+        type: 'line',
+        data: {
+            labels: @json($chartDates),
+            datasets: [
+                {
+                    label: 'Income',
+                    data: incomeValues,
+                    borderWidth: 3,
+                    tension: 0.4,
+                    fill: false
+                },
+                {
+                    label: 'Expenses',
+                    data: expenseValues,
+                    borderWidth: 3,
+                    tension: 0.4,
+                    fill: false
+                }
+            ]
+        },
+        options: {
+            responsive: true,
+            interaction: {
+                intersect: false,
+                mode: 'index'
+            },
+            scales: {
+                y: {
+                    min: -maxValue,
+                    max: maxValue,
+                    ticks: {
+                        callback: function(value) {
+                            return value;
+                        }
+                    }
+                }
+            },
+            plugins: {
+                tooltip: {
+                    callbacks: {
+                        label: function(context) {
+                            return context.dataset.label + ': ' + context.raw;
+                        }
+                    }
+                }
+            }
+        }
+    });
     loadRates();
-});
+    document.getElementById('refresh-rates-btn')
+    .addEventListener('click', () => {
+        loadRates();
+    });
 </script>
 
 @endsection
