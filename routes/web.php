@@ -40,13 +40,27 @@ Route::get('/dashboard', function () {
         $expenseChart[] = -$dailyExpense;
         $currentDate->addDay();
     }
+    // Recent Transactions
+    $recentTransactions = collect();
+    $recentTransactions = $recentTransactions
+        ->merge(Income::latest()->take(5)->get()->map(function($item){
+            $item->type = 'Income';
+            return $item;
+        }));
+
+    $recentTransactions = $recentTransactions
+        ->merge(Expense::latest()->take(5)->get()->map(function($item){
+            $item->type = 'Expense';
+            return $item;
+        }))->sortByDesc('created_at')->take(10);
+
     return view('users.index', compact(
         'balances',
         'chartDates',
         'incomeChart',
-        'expenseChart'
+        'expenseChart',
+        'recentTransactions'
     ));
-
 })->middleware(['auth', 'verified'])->name('dashboard');
 
 Route::middleware('auth')->group(function () {

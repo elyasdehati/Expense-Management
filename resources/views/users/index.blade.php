@@ -43,28 +43,8 @@
       </div>
       <p class="text-xs opacity-40 mt-3" id="rates-timestamp">Last updated: --</p>
      </div><!-- Stats Grid -->
-     <div class="grid grid-cols-2 md:grid-cols-4 gap-3 mb-6">
-      <div class="card-bg rounded-xl p-4">
-       <p data-template-id="total-income-label" class="canva-text text-xs opacity-60"></p>
-       <p class="text-lg font-bold mt-1" id="stat-income">0</p>
-      </div>
-      <div class="card-bg rounded-xl p-4">
-       <p data-template-id="total-expenses-label" class="canva-text text-xs opacity-60"></p>
-       <p class="text-lg font-bold mt-1" id="stat-expenses">0</p>
-      </div>
-      <div class="card-bg rounded-xl p-4">
-       <p data-template-id="total-savings-label" class="canva-text text-xs opacity-60"></p>
-       <p class="text-lg font-bold mt-1" id="stat-savings">0</p>
-      </div>
-      <div class="card-bg rounded-xl p-4">
-       <p data-template-id="total-balance-label" class="canva-text text-xs opacity-60"></p>
-       <p class="text-lg font-bold mt-1" id="stat-balance">0</p>
-      </div>
-     </div><!-- AI Insights -->
-     <div data-template-id="ai-insight-card" class="canva-card glass rounded-2xl p-5 mb-6">
-      <h3 data-template-id="ai-insight-title" class="canva-text text-sm font-semibold mb-2 flex items-center gap-2"><i data-lucide="sparkles" style="width:16px;height:16px;color:#a78bfa"></i></h3>
-      <p class="text-sm opacity-80" id="ai-insight-text">Add transactions to receive personalized insights.</p>
-     </div><!-- Charts -->
+    
+     <!-- Charts -->
 
      <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
       <div class="card-bg rounded-xl p-4">
@@ -82,8 +62,33 @@
      <div class="card-bg rounded-xl p-4">
       <h4 data-template-id="recent-section-title" class="canva-text text-sm font-semibold mb-3"></h4>
       <div id="recent-list" class="space-y-2 max-h-64 overflow-y-auto">
-       <p class="text-sm opacity-50 text-center py-4" data-i18n="no_transactions">No transactions yet</p>
-      </div>
+        @forelse($recentTransactions as $transaction)
+        <div class="flex justify-between bg-white/5 rounded-lg p-3">
+            <div>
+                <p class="text-sm font-semibold">
+                    {{ $transaction->category }}
+                </p>
+                <p class="text-xs opacity-60">
+                    {{ $transaction->date }}
+                </p>
+            </div>
+            <div class="text-right">
+                <p class="font-bold {{ $transaction->type == 'Income' ? 'text-green-400' : 'text-red-400' }}">
+                    {{ $transaction->type == 'Income' ? '+' : '-' }}
+                    {{ $transaction->amount }}
+                    {{ $transaction->currency }}
+                </p>
+                <p class="text-xs opacity-60">
+                    {{ $transaction->type }}
+                </p>
+            </div>
+        </div>
+        @empty
+        <p class="text-sm opacity-50 text-center py-4">
+            No transactions yet
+        </p>
+        @endforelse
+        </div>
      </div>
 
 </section>
